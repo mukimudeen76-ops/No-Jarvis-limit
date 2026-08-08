@@ -21,7 +21,6 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
-      - run: flutter create --platforms=android .
       - run: flutter pub get
       - run: flutter build apk --release --split-per-abi --no-tree-shake-icons
       - name: Upload APKs
@@ -29,42 +28,6 @@ jobs:
         with:
           name: android-apks
           path: build/app/outputs/flutter-apk/*.apk
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.0'
-          channel: 'stable'
-      - run: flutter config --enable-windows-desktop
-      - run: flutter create --platforms=windows .
-      - run: flutter pub get
-      - run: flutter build windows --release --no-tree-shake-icons
-      - name: Upload Windows EXE
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-exe
-          path: build/windows/x64/runner/Release/
-
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.0'
-          channel: 'stable'
-      - run: flutter config --enable-macos-desktop
-      - run: flutter create --platforms=macos .
-      - run: flutter pub get
-      - run: flutter build macos --release --no-tree-shake-icons
-      - name: Upload macOS App
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-app
-          path: build/macos/Build/Products/Release/
 
   build-linux:
     runs-on: ubuntu-latest
@@ -78,7 +41,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
       - run: flutter config --enable-linux-desktop
-      - run: flutter create --platforms=linux .
       - run: flutter pub get
       - run: flutter build linux --release --no-tree-shake-icons
       - name: Upload Linux App
@@ -88,7 +50,7 @@ jobs:
           path: build/linux/x64/release/bundle/
 
   create-release:
-    needs: [build-android, build-windows, build-macos, build-linux]
+    needs: [build-android, build-linux]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     steps:
@@ -100,42 +62,29 @@ jobs:
         run: |
           cd artifacts
           zip -r JARVIS-Android-APKs.zip android-apks/ || true
-          zip -r JARVIS-Windows.zip windows-exe/ || true
-          zip -r JARVIS-macOS.zip macos-app/ || true
           zip -r JARVIS-Linux.zip linux-app/ || true
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: "J.A.R.V.I.S. 2.0 – Official Release"
+          tag_name: v2.0.0
+          name: "J.A.R.V.I.S. 2.0 – Venom Edition Official Release"
           body: |
             ## 🚀 J.A.R.V.I.S. 2.0 – Venom Edition
 
-            ### What's New
-            - 🎙️ Voice interaction (Speech-to-Text + TTS)
-            - 🧠 Multi-AI support: OpenAI, Anthropic, Google Gemini
-            - 📱 Device control: Open apps, Send SMS, Settings
-            - 🏠 IoT Control (MQTT)
-            - 🔍 Search, News, Shodan integration
-            - 💻 Code generation via AI
-            - 🎨 3D Holographic UI with animated orb
-            - 💾 Memory & Context retention
-            - ⚙️ Custom API endpoints
+            ### ✨ Features
+            - 🎙️ **Voice Interaction**: Speech-to-Text + TTS integration
+            - 🧠 **Multi-AI Engine**: Google Gemini, OpenAI GPT-4, Anthropic Claude
+            - 📱 **Device Controls**: Android intents, SMS, app launching
+            - 🏠 **IoT / Smart Home**: MQTT client integration
+            - 🔍 **Live Search & Research**: Brave Search, NewsAPI, Shodan
+            - 🎨 **3D Holographic UI**: Animated cyber-orb with glowing plasma core
+            - 💾 **Encrypted Vault**: Secure local storage for API keys and memory
 
-            ### Download
-            - **Android**: `JARVIS-Android-APKs.zip`
-            - **Windows**: `JARVIS-Windows.zip`
-            - **macOS**: `JARVIS-macOS.zip`
-            - **Linux**: `JARVIS-Linux.zip`
+            ### 📦 Download Packages:
+            - **📱 Android APKs**: `JARVIS-Android-APKs.zip` (split-per-abi arm64, armeabi-v7a, x86_64)
+            - **🐧 Linux App**: `JARVIS-Linux.zip`
 
-            ### Setup
-            1. Extract the ZIP for your platform
-            2. Run the app
-            3. Go to Settings → Add your API keys
-            4. Start talking to J.A.R.V.I.S.!
-
-            ### Credits
-            Built with Flutter ❤️
+            ### 👨‍💻 Created & Masterminded by Tehzeeb
           draft: false
           prerelease: false
           files: |
