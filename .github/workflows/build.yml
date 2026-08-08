@@ -21,6 +21,7 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
+      - run: rm -rf android && flutter create --platforms=android .
       - run: flutter pub get
       - run: flutter build apk --release --split-per-abi --no-tree-shake-icons
       - name: Upload APKs
