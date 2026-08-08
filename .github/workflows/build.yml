@@ -21,9 +21,18 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
-      - run: |
-          mkdir -p android/gradle/wrapper
-          printf "distributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\nzipStoreBase=GRADLE_USER_HOME\nzipStorePath=wrapper/dists\ndistributionUrl=https\://services.gradle.org/distributions/gradle-8.7-bin.zip\n" > android/gradle/wrapper/gradle-wrapper.properties
+      - run: rm -rf android && flutter create --project-name jarvis_ai --platforms=android .
+      - name: Upgrade Gradle wrapper and Kotlin version
+        run: |
+          sed -i 's/7.6.3/8.7/g' android/gradle/wrapper/gradle-wrapper.properties || true
+          sed -i 's/gradle-[0-9.]*-all.zip/gradle-8.7-bin.zip/g' android/gradle/wrapper/gradle-wrapper.properties || true
+          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.22"/' android/build.gradle 2>/dev/null || true
+          sed -i 's/1.7.10/1.9.22/g' android/build.gradle 2>/dev/null || true
+          sed -i 's/1.7.1/1.9.22/g' android/build.gradle 2>/dev/null || true
+          sed -i 's/1.8.0/1.9.22/g' android/build.gradle 2>/dev/null || true
+          sed -i 's/1.7.10/1.9.22/g' android/settings.gradle 2>/dev/null || true
+          sed -i 's/1.7.1/1.9.22/g' android/settings.gradle 2>/dev/null || true
+          sed -i 's/1.8.0/1.9.22/g' android/settings.gradle 2>/dev/null || true
       - run: flutter pub get
       - run: flutter build apk --release --split-per-abi --no-tree-shake-icons
       - name: Upload APKs
