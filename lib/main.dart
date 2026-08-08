@@ -25,7 +25,8 @@ class JarvisApp extends StatelessWidget {
       child: MaterialApp(
         title: 'J.A.R.V.I.S.',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark().copyWith(
+        theme: ThemeData(
+          brightness: Brightness.dark,
           scaffoldBackgroundColor: const Color(0xFF030402),
           fontFamily: 'ShareTechMono',
           colorScheme: const ColorScheme.dark(

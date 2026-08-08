@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:jarvis_ai/screens/home_screen.dart';
 
@@ -38,6 +39,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _controller.forward();
 
     Timer(const Duration(seconds: 3), () {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -157,7 +159,7 @@ class SplashOrbPainter extends CustomPainter {
       ..color = const Color(0xFFFFB347)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 6);
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
     canvas.drawCircle(center, radius, ringPaint);
 
     // Rotating inner ring
@@ -167,9 +169,9 @@ class SplashOrbPainter extends CustomPainter {
       ..strokeWidth = 2;
     canvas.save();
     canvas.translate(center.dx, center.dy);
-    canvas.rotate(progress * 2 * 3.14159);
+    canvas.rotate(progress * 2 * math.pi);
     canvas.drawOval(
-      Rect.fromCenter(center: Offset(0, 0), width: radius * 1.2, height: radius * 0.5),
+      Rect.fromCenter(center: Offset.zero, width: radius * 1.2, height: radius * 0.5),
       innerPaint,
     );
     canvas.restore();
@@ -177,12 +179,13 @@ class SplashOrbPainter extends CustomPainter {
     // Core dot
     final corePaint = Paint()
       ..color = Colors.white
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 20);
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 20);
     canvas.drawCircle(center, radius * 0.15, corePaint);
 
     // Pulsing dot
+    final pulseFactor = 0.6 + 0.3 * (1 + math.sin(progress * 2 * math.pi));
     final pulsePaint = Paint()
-      ..color = const Color(0xFFFFB347).withOpacity(0.6 + 0.3 * (1 + (progress * 2 * 3.14159).sin));
+      ..color = const Color(0xFFFFB347).withOpacity(pulseFactor.clamp(0.0, 1.0));
     canvas.drawCircle(center, radius * 0.08, pulsePaint);
   }
 
