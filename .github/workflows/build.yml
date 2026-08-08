@@ -21,10 +21,9 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
-      - run: flutter create --project-name jarvis_ai --platforms=android .
       - run: |
-          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.22"/' android/build.gradle 2>/dev/null || true
-          sed -i 's/org.jetbrains.kotlin.android.*/org.jetbrains.kotlin.android" version "1.9.22" apply false/' android/settings.gradle 2>/dev/null || true
+          mkdir -p android/gradle/wrapper
+          printf "distributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\nzipStoreBase=GRADLE_USER_HOME\nzipStorePath=wrapper/dists\ndistributionUrl=https\://services.gradle.org/distributions/gradle-8.7-bin.zip\n" > android/gradle/wrapper/gradle-wrapper.properties
       - run: flutter pub get
       - run: flutter build apk --release --split-per-abi --no-tree-shake-icons
       - name: Upload APKs
