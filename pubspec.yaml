@@ -1,0 +1,89 @@
+name: jarvis_ai
+description: J.A.R.V.I.S. – Advanced AI HUD with Venom personality, cross-platform (Android, Windows, macOS, Linux).
+version: 2.0.0+1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & 3D
+  flutter_svg: ^2.0.0
+  animations: ^2.0.0
+  shimmer: ^3.0.0
+
+  # Voice & Speech
+  speech_to_text: ^6.6.0
+  flutter_tts: ^3.8.0
+
+  # Networking
+  http: ^1.2.0
+  dio: ^5.4.0
+  mqtt_client: ^10.0.0
+
+  # State management & persistence
+  provider: ^6.1.1
+  shared_preferences: ^2.2.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.0.0
+
+  # Permissions & device control
+  permission_handler: ^11.3.0
+  device_info_plus: ^9.0.0
+  android_intent_plus: ^5.0.0
+  url_launcher: ^6.2.0
+
+  # Image recognition
+  google_ml_kit: ^0.18.0
+
+  # Utilities
+  intl: ^0.18.0
+  path_provider: ^2.1.0
+  crypto: ^3.0.3
+  uuid: ^4.3.3
+
+  # Desktop support
+  window_manager: ^0.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  hive_generator: ^2.0.0
+  build_runner: ^2.4.0
+  flutter_launcher_icons: ^0.13.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Orbitron
+      fonts:
+        - asset: assets/fonts/Orbitron-VariableFont_wght.ttf
+    - family: ShareTechMono
+      fonts:
+        - asset: assets/fonts/ShareTechMono-Regular.ttf
+  assets:
+    - assets/.env
+    - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/icon.png"
+    background_color: "#030402"
+    theme_color: "#030402"
+  windows:
+    generate: true
+    image_path: "assets/images/icon.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/icon.png"

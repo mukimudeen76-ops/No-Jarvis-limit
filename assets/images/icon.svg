@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#030402"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#FFB347" stroke-width="8"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="#FFB347" stroke-width="4" opacity="0.6"/>
+  <circle cx="256" cy="256" r="80" fill="none" stroke="#FFB347" stroke-width="3" opacity="0.4"/>
+  <circle cx="256" cy="256" r="40" fill="#FFB347" opacity="0.3"/>
+  <circle cx="256" cy="256" r="20" fill="#FFB347"/>
+  <text x="256" y="300" font-family="Orbitron, sans-serif" font-size="28" font-weight="800" fill="#FFB347" text-anchor="middle" letter-spacing="4">JARVIS</text>
+  <text x="256" y="340" font-family="monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" opacity="0.5" letter-spacing="2">2.0</text>
+  <line x1="100" y1="420" x2="412" y2="420" stroke="#FFB347" stroke-width="2" opacity="0.3"/>
+  <text x="256" y="455" font-family="monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" opacity="0.4" letter-spacing="2">VENOM EDITION</text>
+</svg>

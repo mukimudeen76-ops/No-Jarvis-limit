@@ -1,0 +1,135 @@
+name: Build & Release J.A.R.V.I.S.
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter build apk --release --split-per-abi
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apks
+          path: build/app/outputs/flutter-apk/*.apk
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter build windows --release
+      - name: Upload Windows EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: build/windows/x64/runner/Release/
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter build macos --release
+      - name: Upload macOS App
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-app
+          path: build/macos/Build/Products/Release/
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - run: flutter pub get
+      - run: flutter build linux --release
+      - name: Upload Linux App
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-app
+          path: build/linux/x64/release/bundle/
+
+  create-release:
+    needs: [build-android, build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Create ZIP packages
+        run: |
+          cd artifacts
+          zip -r JARVIS-Android-APKs.zip android-apks/
+          zip -r JARVIS-Windows.zip windows-exe/
+          zip -r JARVIS-macOS.zip macos-app/
+          zip -r JARVIS-Linux.zip linux-app/
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: "J.A.R.V.I.S. 2.0 – Official Release"
+          body: |
+            ## 🚀 J.A.R.V.I.S. 2.0 – Venom Edition
+
+            ### What's New
+            - 🎙️ Voice interaction (Speech-to-Text + TTS)
+            - 🧠 Multi-AI support: OpenAI, Anthropic, Google Gemini
+            - 📱 Device control: Open apps, Send SMS, Settings
+            - 🏠 IoT Control (MQTT)
+            - 🔍 Search, News, Shodan integration
+            - 💻 Code generation via AI
+            - 🎨 3D Holographic UI with animated orb
+            - 💾 Memory & Context retention
+            - ⚙️ Custom API endpoints
+
+            ### Download
+            - **Android**: `JARVIS-Android-APKs.zip`
+            - **Windows**: `JARVIS-Windows.zip`
+            - **macOS**: `JARVIS-macOS.zip`
+            - **Linux**: `JARVIS-Linux.zip`
+
+            ### Setup
+            1. Extract the ZIP for your platform
+            2. Run the app
+            3. Go to Settings → Add your API keys
+            4. Start talking to J.A.R.V.I.S.!
+
+            ### API Keys Needed (Optional)
+            - OpenAI / Anthropic / Gemini (any one for AI chat)
+            - Brave Search (for web search)
+            - NewsAPI (for news)
+            - Shodan (for security research)
+            - ElevenLabs (for voice cloning)
+
+            ### Credits
+            Built with Flutter ❤️
+          draft: false
+          prerelease: false
+          files: |
+            artifacts/*.zip

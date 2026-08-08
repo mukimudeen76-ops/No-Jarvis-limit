@@ -1,0 +1,22 @@
+# Flutter/Dart
+**/doc/api/
+**/generated_plugin_registrant.dart
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+flutter_*.png
+.dart_tool/
+pubspec.lock
+.idea/
+.vscode/
+*.iml
+*.iws
+*.lock
+*.tmproj
+*.swp
+.DS_Store
+.env
+# Icon generated files
+assets/images/icon.png
