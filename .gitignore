@@ -17,6 +17,3 @@ pubspec.lock
 *.tmproj
 *.swp
 .DS_Store
-.env
-# Icon generated files
-assets/images/icon.png
